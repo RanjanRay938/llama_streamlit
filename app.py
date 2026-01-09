@@ -3,11 +3,11 @@ from groq import Groq
 import os
 from dotenv import load_dotenv
 
-# ---------------- LOAD ENV ----------------
+# LOAD ENV 
 load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-# ---------------- UI ----------------
+# UI 
 st.set_page_config(page_title="LLaMA Chatbot", page_icon="🦙")
 st.title("🦙 LLaMA-3 Chatbot")
 st.caption("Powered by Groq (LLaMA-3)")
