@@ -14,36 +14,45 @@ st.caption("Powered by Groq (LLaMA-3)")
 
 # ---------------- SESSION STATE ----------------
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [
+        {"role": "system", "content": "You are a helpful AI assistant."}
+    ]
 
 # ---------------- DISPLAY CHAT ----------------
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.markdown(msg["content"])
+    if msg["role"] != "system":
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
 # ---------------- USER INPUT ----------------
 prompt = st.chat_input("Ask something...")
 
 if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
+    # Add user message
+    st.session_state.messages.append(
+        {"role": "user", "content": prompt}
+    )
+
     with st.chat_message("user"):
         st.markdown(prompt)
 
+    # Assistant response
     with st.chat_message("assistant"):
         response_placeholder = st.empty()
         full_response = ""
 
-stream = client.chat.completions.create(
-    model="llama-3.1-8b-instant",
-    messages=st.session_state.messages,
-    stream=True,
-)
- 
-for chunk in stream:
+        stream = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=st.session_state.messages,
+            stream=True,
+        )
+
+        for chunk in stream:
             if chunk.choices[0].delta.content:
                 full_response += chunk.choices[0].delta.content
                 response_placeholder.markdown(full_response)
 
-st.session_state.messages.append(
-            {"role": "assistant", "content": full_response}
-        )
+    # Save assistant reply
+    st.session_state.messages.append(
+        {"role": "assistant", "content": full_response}
+    )
