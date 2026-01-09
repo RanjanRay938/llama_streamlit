@@ -8,23 +8,23 @@ load_dotenv()
 client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 # UI 
-st.set_page_config(page_title="LLaMA Chatbot", page_icon="🦙")
-st.title("🦙 LLaMA-3 Chatbot")
+st.set_page_config(page_title="LLaMA Chatbot", page_icon="")
+st.title("Ranjan  Chatbot")
 st.caption("Powered by Groq (LLaMA-3)")
 
-# ---------------- SESSION STATE ----------------
+#  SESSION STATE -
 if "messages" not in st.session_state:
     st.session_state.messages = [
         {"role": "system", "content": "You are a helpful AI assistant."}
     ]
 
-# ---------------- DISPLAY CHAT ----------------
+    #  DISPLAY CHAT 
 for msg in st.session_state.messages:
     if msg["role"] != "system":
         with st.chat_message(msg["role"]):
             st.markdown(msg["content"])
 
-# ---------------- USER INPUT ----------------
+    #  USER INPUT
 prompt = st.chat_input("Ask something...")
 
 if prompt:
